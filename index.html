@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="uz">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Boshlang'ich sinf repetitori</title>
+  <meta name="description" content="Boshlang'ich sinf (1–4) o'quvchilari bilan individual va guruh mashg'ulotlari: uy vazifalari, maktab darslarini mustahkamlash, ota-onalarga kunlik hisobot.">
+  <meta name="theme-color" content="#fbf8f1">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="bosh.css">
+</head>
+<body>
+  <header class="tepa">
+    <div class="ichi tepa-ichi">
+      <a href="#" class="belgi"><span class="belgi-rasm" aria-hidden="true">✏️</span><span id="b-ism-qisqa">Repetitor</span></a>
+      <nav class="havolalar">
+        <a href="#haqida">Men haqimda</a>
+        <a href="#guruhlar">Guruhlar</a>
+        <a href="#yozilish">Yozilish</a>
+      </nav>
+      <a class="tugma kichik" href="/ota-ona">👨‍👩‍👧 Ota-onalar uchun</a>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="ichi hero-ichi">
+        <div class="hero-matn">
+          <p class="nishon">1–4-sinf · barcha fanlar</p>
+          <h1 id="b-shior">Maktab darslari — <span class="chizilgan">oson</span> va <span class="chizilgan k">quvnoq</span></h1>
+          <p class="hero-izoh" id="b-ism-izoh">Farzandingiz bilan maktabda o'tilgan mavzularni mustahkamlaymiz, uy vazifalarini birga bajaramiz va har kuni sizga hisobot yuboramiz.</p>
+          <div class="hero-tugmalar">
+            <a class="tugma asosiy" href="#yozilish">Darsga yozilish</a>
+            <a class="tugma" href="/ota-ona">Farzandim natijalari</a>
+          </div>
+        </div>
+        <div class="hero-daftar karta" aria-hidden="true">
+          <div class="daftar-qator"><span class="fan" data-fan="Matematika">➕ Matematika</span><b>✅</b></div>
+          <div class="daftar-qator"><span class="fan" data-fan="Ona tili">✏️ Ona tili</span><b>⚠️</b></div>
+          <div class="daftar-qator"><span class="fan" data-fan="O'qish">📖 O'qish</span><b>✅</b></div>
+          <div class="daftar-natija">🌟 Mustahkam o'zlashtirdi</div>
+          <p class="daftar-izoh">Ota-onaga kunlik hisobot — Telegram orqali</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="ichi bolim afzallik">
+      <div class="karta"><span>📒</span><h3>Kunlik hisobot</h3><p>Bugun nima o'tildi, qanday vazifa berildi, farzandingiz qanday bajardi.</p></div>
+      <div class="karta"><span>📊</span><h3>Oylik natija</h3><p>Har oy har bir fan bo'yicha o'zlashtirish bahosi.</p></div>
+      <div class="karta"><span>🔔</span><h3>Telegram xabarlar</h3><p>Yangi vazifa, natijalar va eslatmalar telefoningizga keladi.</p></div>
+    </section>
+
+    <section class="ichi bolim" id="haqida">
+      <div class="karta haqida">
+        <div class="haqida-bosh">
+          <span class="avatar" aria-hidden="true">👩‍🏫</span>
+          <div>
+            <h2 id="b-ism">Repetitor</h2>
+            <p class="izoh" id="b-tajriba"></p>
+          </div>
+        </div>
+        <p id="b-haqida" class="haqida-matn">Ma'lumot tez orada qo'shiladi.</p>
+        <div class="fanlar" id="b-fanlar"></div>
+        <p class="izoh" id="b-manzil"></p>
+      </div>
+    </section>
+
+    <section class="ichi bolim" id="guruhlar">
+      <h2 class="bolim-sarlavha">Guruhlar va narxlar</h2>
+      <div class="guruhlar" id="b-guruhlar"></div>
+      <p class="narxlar-matn" id="b-narxlar"></p>
+      <p class="narxlar-matn" id="b-jadval"></p>
+    </section>
+
+    <section class="ichi bolim" id="yozilish">
+      <form class="karta yozilish" id="ariza-forma" novalidate>
+        <h2>Darsga yozilish</h2>
+        <p class="izoh">Arizani qoldiring — tez orada siz bilan bog'lanamiz.</p>
+        <div class="yozilish-maydonlar">
+          <label class="maydon">Ismingiz<input id="a-ism" name="ism" required autocomplete="name"></label>
+          <label class="maydon">Telefon<input id="a-tel" name="tel" type="tel" required placeholder="+998 __ ___ __ __" autocomplete="tel"></label>
+          <label class="maydon">Farzandingiz ismi<input id="a-bola" name="bola" required></label>
+          <label class="maydon">Sinfi
+            <select id="a-sinf" name="sinf">
+              <option>1-sinf</option><option>2-sinf</option><option>3-sinf</option><option>4-sinf</option><option>Maktabgacha</option>
+            </select>
+          </label>
+          <label class="maydon keng">Izoh (ixtiyoriy)<textarea id="a-izoh" name="izoh" rows="2"></textarea></label>
+        </div>
+        <input class="yashirin-maydon" name="sayt" tabindex="-1" autocomplete="off" aria-hidden="true">
+        <span class="xato-matn" id="ariza-xato" role="alert" hidden></span>
+        <button class="tugma asosiy" type="submit">Ariza yuborish</button>
+        <div class="ariza-ok" id="ariza-ok" hidden>✅ Arizangiz qabul qilindi! Tez orada bog'lanamiz.</div>
+      </form>
+    </section>
+  </main>
+
+  <footer class="pastki">
+    <div class="ichi pastki-ichi">
+      <span>© <span id="yil">2026</span> · <span id="b-ism-past">Repetitor</span></span>
+      <a href="/ota-ona">Ota-onalar uchun kirish</a>
+    </div>
+  </footer>
+
+  <div id="xabar" class="xabar" role="status" aria-live="polite"></div>
+  <script src="dist/yordam.js"></script>
+  <script src="dist/bosh.js"></script>
+</body>
+</html>

@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="uz">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Repetitor paneli</title>
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#fbf8f1">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+  <!-- ================= KIRISH ================= -->
+  <main id="kirish" class="ichi kirish">
+    <form class="karta kirish-karta" id="kirish-forma" novalidate>
+      <span class="kirish-belgi" aria-hidden="true">👩‍🏫</span>
+      <h1>Repetitor paneli</h1>
+      <label class="maydon">Login<input id="login" autocomplete="username" autocapitalize="none" spellcheck="false" required></label>
+      <label class="maydon">Parol<input id="parol" type="password" autocomplete="current-password" required></label>
+      <span class="xato-matn" id="kirish-xato" role="alert" hidden></span>
+      <button class="tugma asosiy toliq" type="submit" id="kirish-tugma">Kirish</button>
+      <a class="izoh" href="/">← Saytga qaytish</a>
+    </form>
+  </main>
+
+  <!-- ================= PANEL ================= -->
+  <div id="panel" hidden>
+    <header class="a-tepa">
+      <div class="ichi a-tepa-ichi">
+        <b class="a-nom">✏️ Repetitor paneli</b>
+        <a class="tugma kichik" href="/" target="_blank" rel="noopener">Sayt ↗</a>
+        <button class="tugma kichik" id="chiqish" type="button">Chiqish</button>
+      </div>
+      <nav class="ichi a-tablar" role="tablist" aria-label="Bo'limlar">
+        <button class="a-tab faol" data-tab="jurnal" role="tab">📒 Kunlik jurnal</button>
+        <button class="a-tab" data-tab="oquvchilar" role="tab">👧 O'quvchilar</button>
+        <button class="a-tab" data-tab="tolovlar" role="tab">💳 To'lovlar</button>
+        <button class="a-tab" data-tab="baholar" role="tab">📊 Oylik baholar</button>
+        <button class="a-tab" data-tab="arizalar" role="tab">📨 Arizalar <span id="ariza-soni" class="sanoq" hidden></span></button>
+        <button class="a-tab" data-tab="sozlamalar" role="tab">⚙️ Sozlamalar</button>
+      </nav>
+    </header>
+
+    <main class="ichi a-ichi">
+      <!-- ---------- KUNLIK JURNAL ---------- -->
+      <section id="t-jurnal" class="a-bolim">
+        <div class="filtr karta">
+          <label class="maydon">Guruh<select id="j-guruh"></select></label>
+          <label class="maydon">Sana<input id="j-sana" type="date"></label>
+          <button class="tugma asosiy" id="j-hisobot" type="button">📨 Ota-onalarga kunlik hisobot</button>
+        </div>
+        <div id="j-bosh" class="bosh-holat" hidden>Avval «O'quvchilar» bo'limida guruh va o'quvchi qo'shing.</div>
+        <div id="j-ichi" class="jurnal">
+          <section class="karta blok">
+            <div class="blok-bosh"><h2>✅ Davomat</h2><button class="tugma kichik" id="j-hamma-keldi" type="button">Hammasi keldi</button></div>
+            <div id="j-davomat" class="davomat"></div>
+          </section>
+
+          <section class="karta blok">
+            <div class="blok-bosh"><h2>📖 Bugun o'tilgan mavzular</h2></div>
+            <div id="j-darslar" class="royxat"></div>
+            <form id="dars-forma" class="qosh-forma">
+              <select id="d-fan" class="inp" aria-label="Fan"></select>
+              <input id="d-mavzu" class="inp" placeholder="Mavzu: masalan, Ikki xonali sonlarni qo'shish" maxlength="200" required>
+              <button class="tugma" type="submit">+ Qo'shish</button>
+            </form>
+          </section>
+
+          <section class="karta blok">
+            <div class="blok-bosh"><h2>📝 Topshiriqlar</h2><button class="tugma kichik asosiy" id="t-yangi" type="button">+ Topshiriq</button></div>
+            <p class="izoh">Har bir o'quvchi uchun bitta bosish: ✅ bajardi · ⚠️ qisman · ❌ bajarmadi. ⭐ — yulduzcha (ixtiyoriy).</p>
+            <div id="j-topshiriqlar" class="topshiriqlar"></div>
+          </section>
+        </div>
+      </section>
+
+      <!-- ---------- O'QUVCHILAR ---------- -->
+      <section id="t-oquvchilar" class="a-bolim" hidden>
+        <div class="karta blok">
+          <div class="blok-bosh"><h2>Guruhlar</h2><button class="tugma kichik asosiy" id="g-yangi" type="button">+ Guruh</button></div>
+          <div id="g-royxat" class="guruhlar"></div>
+        </div>
+        <div class="karta blok">
+          <div class="blok-bosh"><h2>O'quvchilar</h2></div>
+          <form id="o-forma" class="qosh-forma">
+            <input id="o-ism" class="inp" placeholder="O'quvchi ismi" maxlength="60" required>
+            <select id="o-guruh" class="inp" aria-label="Guruh"></select>
+            <button class="tugma asosiy" type="submit">+ Qo'shish</button>
+          </form>
+          <p class="izoh">Har bir o'quvchiga <b>ota-ona kodi</b> beriladi. Kodni ota-onaga yuboring — ular saytdagi «Ota-onalar uchun» bo'limiga shu kod bilan kiradi.</p>
+          <div id="o-royxat" class="oquvchilar"></div>
+        </div>
+      </section>
+
+      <!-- ---------- TO'LOVLAR ---------- -->
+      <section id="t-tolovlar" class="a-bolim" hidden>
+        <div class="filtr karta">
+          <label class="maydon">Oy<input id="p-oy" type="month"></label>
+          <div class="p-jami" id="p-jami"></div>
+          <button class="tugma" id="p-eslatma" type="button">🔔 Qarzdorlarga eslatma</button>
+        </div>
+        <div class="jadval-joy"><table class="jadval" id="p-jadval"></table></div>
+        <div class="karta blok"><h2>Shu oydagi to'lovlar</h2><div id="p-tarix" class="royxat"></div></div>
+      </section>
+
+      <!-- ---------- OYLIK BAHOLAR ---------- -->
+      <section id="t-baholar" class="a-bolim" hidden>
+        <div class="filtr karta">
+          <label class="maydon">Guruh<select id="b-guruh"></select></label>
+          <label class="maydon">Oy<input id="b-oy" type="month"></label>
+          <button class="tugma asosiy" id="b-yubor" type="button">📨 Ota-onalarga yuborish</button>
+        </div>
+        <p class="izoh">🌟 Mustahkam o'zlashtirdi · 👍 O'zlashtirmoqda · 💪 Ko'proq mashq kerak. Baho oyiga bir marta qo'yiladi.</p>
+        <div class="jadval-joy"><table class="jadval baho-jadval" id="b-jadval"></table></div>
+      </section>
+
+      <!-- ---------- ARIZALAR ---------- -->
+      <section id="t-arizalar" class="a-bolim" hidden>
+        <div id="ar-royxat" class="royxat"></div>
+      </section>
+
+      <!-- ---------- SOZLAMALAR ---------- -->
+      <section id="t-sozlamalar" class="a-bolim" hidden>
+        <div class="karta blok">
+          <div class="blok-bosh"><h2>🤖 Telegram bot</h2></div>
+          <p class="izoh" id="bot-holat">Tekshirilmoqda…</p>
+          <div class="tugmalar" id="bot-tugmalar"></div>
+        </div>
+        <form class="karta blok" id="s-forma">
+          <div class="blok-bosh"><h2>🌐 Ochiq sahifa</h2></div>
+          <div class="s-maydonlar">
+            <label class="maydon">Ismingiz (sahifada ko'rinadi)<input id="s-ism" maxlength="80" placeholder="Masalan: Dilnoza opa"></label>
+            <label class="maydon">Tajriba<input id="s-tajriba" maxlength="60" placeholder="Masalan: 8 yil"></label>
+            <label class="maydon keng">Shior (katta sarlavha)<input id="s-shior" maxlength="160" placeholder="Maktab darslari — oson va quvnoq"></label>
+            <label class="maydon keng">Men haqimda<textarea id="s-haqida" rows="4" maxlength="1500"></textarea></label>
+            <label class="maydon keng">Manzil<input id="s-manzil" maxlength="160" placeholder="Masalan: Andijon, Bobur shoh ko'chasi"></label>
+            <label class="maydon keng">Narxlar haqida qo'shimcha<textarea id="s-narxlar" rows="2" maxlength="800"></textarea></label>
+            <label class="maydon keng">Dars vaqtlari<textarea id="s-jadval" rows="2" maxlength="600"></textarea></label>
+          </div>
+          <button class="tugma asosiy" type="submit">Saqlash</button>
+        </form>
+      </section>
+    </main>
+  </div>
+
+  <!-- ================= OYNALAR ================= -->
+  <dialog class="oyna" id="topshiriq-oyna">
+    <form class="oyna-ichi" id="topshiriq-forma" novalidate>
+      <div class="oyna-bosh"><h3>Yangi topshiriq</h3><button type="button" class="yop" data-yop aria-label="Yopish">✕</button></div>
+      <div class="ikki">
+        <label class="maydon">Fan<select id="t-fan"></select></label>
+        <label class="maydon">Turi<select id="t-turi"><option value="uy">🏠 Uy vazifasi</option><option value="qoshimcha">➕ Qo'shimcha topshiriq</option></select></label>
+      </div>
+      <label class="maydon">Topshiriq<textarea id="t-matn" rows="3" maxlength="1500" placeholder="Masalan: Darslik, 34-bet, 5-mashq" required></textarea></label>
+      <label class="maydon">Muddat (ixtiyoriy)<input id="t-muddat" type="date"></label>
+      <div class="t-rasmlar" id="t-rasmlar"></div>
+      <label class="tugma kichik rasm-tugma">📷 Rasm qo'shish<input id="t-rasm" type="file" accept="image/*" multiple></label>
+      <label class="belgi-q"><input id="t-xabar" type="checkbox" checked> Ota-onalarga Telegram orqali xabar yuborish</label>
+      <span class="xato-matn" id="t-xato" hidden></span>
+      <div class="oyna-past"><button type="button" class="tugma" data-yop>Bekor qilish</button><button type="submit" class="tugma asosiy" id="t-saqla">Saqlash</button></div>
+    </form>
+  </dialog>
+
+  <dialog class="oyna" id="guruh-oyna">
+    <form class="oyna-ichi" id="guruh-forma" novalidate>
+      <div class="oyna-bosh"><h3 id="g-sarlavha">Guruh</h3><button type="button" class="yop" data-yop aria-label="Yopish">✕</button></div>
+      <label class="maydon">Guruh nomi<input id="g-nomi" maxlength="60" placeholder="Masalan: 2-sinf, ertalabki" required></label>
+      <div class="ikki">
+        <label class="maydon">Sinf<select id="g-sinf"><option value="1">1-sinf</option><option value="2">2-sinf</option><option value="3">3-sinf</option><option value="4">4-sinf</option><option value="0">Maktabgacha</option></select></label>
+        <label class="maydon">Oylik narx (so'm)<input id="g-narx" type="number" min="0" step="10000" inputmode="numeric"></label>
+      </div>
+      <label class="maydon">Dars vaqti<input id="g-jadval" maxlength="200" placeholder="Masalan: Du, Cho, Ju · 15:00–16:30"></label>
+      <span class="xato-matn" id="g-xato" hidden></span>
+      <div class="oyna-past"><button type="button" class="tugma xavf" id="g-ochir">O'chirish</button><button type="button" class="tugma" data-yop>Bekor qilish</button><button type="submit" class="tugma asosiy">Saqlash</button></div>
+    </form>
+  </dialog>
+
+  <dialog class="oyna" id="oquvchi-oyna">
+    <form class="oyna-ichi" id="oquvchi-forma" novalidate>
+      <div class="oyna-bosh"><h3>O'quvchi</h3><button type="button" class="yop" data-yop aria-label="Yopish">✕</button></div>
+      <label class="maydon">Ismi<input id="ou-ism" maxlength="60" required></label>
+      <label class="maydon">Guruh<select id="ou-guruh"></select></label>
+      <label class="belgi-q"><input id="ou-faol" type="checkbox"> Faol (darsga qatnashyapti)</label>
+      <div class="kod-blok">
+        <span class="izoh">Ota-ona kodi</span>
+        <b id="ou-kod" class="kod"></b>
+        <div class="tugmalar"><button type="button" class="tugma kichik" id="ou-nusxa">Nusxalash</button><button type="button" class="tugma kichik" id="ou-yangi-kod">Yangi kod</button></div>
+      </div>
+      <span class="xato-matn" id="ou-xato" hidden></span>
+      <div class="oyna-past"><button type="button" class="tugma xavf" id="ou-ochir">O'chirish</button><button type="button" class="tugma" data-yop>Bekor qilish</button><button type="submit" class="tugma asosiy">Saqlash</button></div>
+    </form>
+  </dialog>
+
+  <dialog class="oyna" id="tolov-oyna">
+    <form class="oyna-ichi" id="tolov-forma" novalidate>
+      <div class="oyna-bosh"><h3 id="tl-sarlavha">To'lov</h3><button type="button" class="yop" data-yop aria-label="Yopish">✕</button></div>
+      <label class="maydon">Summa (so'm)<input id="tl-summa" type="number" min="1000" step="1000" inputmode="numeric" required></label>
+      <label class="maydon">Izoh (ixtiyoriy)<input id="tl-izoh" maxlength="200" placeholder="Masalan: naqd / karta"></label>
+      <span class="xato-matn" id="tl-xato" hidden></span>
+      <div class="oyna-past"><button type="button" class="tugma" data-yop>Bekor qilish</button><button type="submit" class="tugma asosiy">Saqlash</button></div>
+    </form>
+  </dialog>
+
+  <div id="xabar" class="xabar" role="status" aria-live="polite"></div>
+  <script src="dist/yordam.js"></script>
+  <script src="dist/admin.js"></script>
+</body>
+</html>

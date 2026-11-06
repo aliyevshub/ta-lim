@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="uz">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Ota-onalar kabineti</title>
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#fbf8f1">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="otaona.css">
+</head>
+<body>
+  <header class="oo-tepa">
+    <div class="ichi oo-tepa-ichi">
+      <a href="/" class="oo-orqaga">← Bosh sahifa</a>
+      <div id="bolalar" class="bolalar" hidden></div>
+    </div>
+  </header>
+
+  <!-- Kod kiritish -->
+  <main id="kirish" class="ichi kirish">
+    <form class="karta kirish-karta" id="kod-forma" novalidate>
+      <span class="kirish-belgi" aria-hidden="true">👨‍👩‍👧</span>
+      <h1>Ota-onalar kabineti</h1>
+      <p class="izoh">Farzandingiz kodini kiriting. Kodni repetitordan olasiz.</p>
+      <label class="maydon">Kod
+        <input id="kod" name="kod" placeholder="ABCD-2345" autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="9" required>
+      </label>
+      <span class="xato-matn" id="kod-xato" role="alert" hidden></span>
+      <button class="tugma asosiy toliq" type="submit">Kirish</button>
+    </form>
+  </main>
+
+  <!-- Kabinet -->
+  <main id="kabinet" class="ichi kabinet" hidden>
+    <section class="oo-bosh">
+      <div>
+        <p class="izoh" id="k-guruh"></p>
+        <h1 id="k-ism"></h1>
+      </div>
+      <div class="oo-bosh-tugma">
+        <a class="tugma asosiy" id="k-tg" target="_blank" rel="noopener" hidden>🔔 Telegram'ga ulash</a>
+        <span class="tg-ok" id="k-tg-ok" hidden>🔔 Telegram ulangan</span>
+      </div>
+    </section>
+
+    <section class="xulosa" id="k-xulosa"></section>
+
+    <nav class="tablar" role="tablist" aria-label="Bo'limlar">
+      <button class="tab faol" role="tab" aria-selected="true" data-tab="kundalik">📒 Kundalik</button>
+      <button class="tab" role="tab" aria-selected="false" data-tab="natija">📊 Oylik natija</button>
+      <button class="tab" role="tab" aria-selected="false" data-tab="davomat">✅ Davomat</button>
+      <button class="tab" role="tab" aria-selected="false" data-tab="tolov">💳 To'lovlar</button>
+    </nav>
+
+    <section id="tab-kundalik" class="tab-ichi"></section>
+    <section id="tab-natija" class="tab-ichi" hidden></section>
+    <section id="tab-davomat" class="tab-ichi" hidden></section>
+    <section id="tab-tolov" class="tab-ichi" hidden></section>
+
+    <div class="oo-past">
+      <button class="tugma kichik" id="bola-qosh" type="button">+ Boshqa farzand kodi</button>
+      <button class="tugma kichik xavf" id="chiqish" type="button">Bu qurilmadan chiqish</button>
+    </div>
+  </main>
+
+  <dialog class="oyna" id="rasm-oyna"><img id="rasm-katta" alt=""></dialog>
+  <div id="xabar" class="xabar" role="status" aria-live="polite"></div>
+  <script src="dist/yordam.js"></script>
+  <script src="dist/otaona.js"></script>
+</body>
+</html>

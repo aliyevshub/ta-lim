@@ -1,0 +1,11 @@
+src
+worker
+node_modules
+.wrangler
+tsconfig.json
+README.md
+wrangler.jsonc
+.dev.vars
+.assetsignore
+.gitignore
+.git
