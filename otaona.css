@@ -28,6 +28,9 @@
 .tablar { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; padding: 2px; }
 .tablar::-webkit-scrollbar { display: none; }
 .tab { flex-shrink: 0; padding: 9px 14px; border-radius: 12px; border: 2px solid var(--chiziq); background: var(--sirt); font-weight: 800; cursor: pointer; color: var(--matn-2); }
+.tab { transition: transform .18s cubic-bezier(.3,1.6,.5,1), background-color .15s; }
+.tab:hover { transform: translateY(-2px); }
+.tab:active { transform: translateY(1px); }
 .tab.faol { background: var(--matn); color: var(--fon); border-color: var(--matn); }
 .tab:focus-visible { outline: 3px solid var(--kok); outline-offset: 2px; }
 
@@ -45,7 +48,7 @@
 .turi { font-size: 12px; font-weight: 800; color: var(--matn-2); }
 .izoh-q { font-size: 14px; color: var(--matn-2); font-style: italic; }
 .rasmlar { display: flex; gap: 6px; flex-wrap: wrap; }
-.rasmlar button { padding: 0; border: 2px solid var(--chiziq); border-radius: 10px; overflow: hidden; width: 72px; height: 72px; cursor: zoom-in; background: var(--sirt); }
+.rasmlar button { transition: transform .18s cubic-bezier(.3,1.6,.5,1); padding: 0; border: 2px solid var(--chiziq); border-radius: 10px; overflow: hidden; width: 72px; height: 72px; cursor: zoom-in; background: var(--sirt); }
 .rasmlar img { width: 100%; height: 100%; object-fit: cover; }
 #rasm-oyna { width: min(900px, calc(100% - 16px)); }
 #rasm-katta { width: 100%; height: auto; }
@@ -72,3 +75,7 @@
   .xulosa span { font-size: 12px; }
   .oo-bosh-tugma, .oo-bosh-tugma .tugma { width: 100%; }
 }
+
+.rasmlar button:hover { transform: scale(1.06) rotate(-2deg); }
+.bolalar button { transition: transform .18s cubic-bezier(.3,1.6,.5,1); }
+.bolalar button:hover { transform: translateY(-2px); }

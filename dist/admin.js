@@ -707,6 +707,23 @@
             xabar(err.message);
         }
     });
+    // B8: belgilar bosilganda kichik "sakrash" animatsiyasi (qayta chizilgandan keyin)
+    document.addEventListener("click", (e) => {
+        const b = e.target.closest("[data-dav], [data-baj], [data-yulduz]");
+        if (!b)
+            return;
+        const kalit = b.matches("[data-dav]") ? `[data-dav="${b.dataset.dav}"]` : b.matches("[data-baj]") ? `[data-baj="${b.dataset.baj}"]` : "[data-yulduz]";
+        const qator = b.closest("[data-oq]")?.dataset.oq, top = b.closest("[data-top]")?.dataset.top;
+        window.setTimeout(() => {
+            const joy = top ? `[data-top="${top}"] [data-oq="${qator}"]` : `#j-davomat [data-oq="${qator}"]`;
+            const yangi = document.querySelector(`${joy} ${kalit}`);
+            if (!yangi)
+                return;
+            yangi.classList.remove("sakra");
+            void yangi.offsetWidth;
+            yangi.classList.add("sakra");
+        }, 180);
+    });
     // ================= ISHGA TUSHIRISH =================
     if (token)
         boshlash().catch(() => chiqishEkrani());

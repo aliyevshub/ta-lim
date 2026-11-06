@@ -11,7 +11,10 @@
 .a-tablar { display: flex; gap: 4px; overflow-x: auto; scrollbar-width: none; padding-bottom: 8px; }
 .a-tablar::-webkit-scrollbar { display: none; }
 .a-tab { flex-shrink: 0; padding: 8px 12px; border-radius: 11px; border: 2px solid transparent; background: transparent; font-weight: 800; color: var(--matn-2); cursor: pointer; }
-.a-tab:hover { background: var(--sirt); }
+.a-tab { transition: background-color .15s, transform .18s cubic-bezier(.3,1.6,.5,1); }
+.a-tab:hover { background: var(--sirt); transform: translateY(-1px); }
+.a-tab:active { transform: translateY(1px); }
+.yulduz:hover:not(:disabled) { transform: scale(1.08); }
 .a-tab.faol { background: var(--matn); color: var(--fon); }
 .a-tab:focus-visible { outline: 3px solid var(--kok); outline-offset: 2px; }
 .sanoq { display: inline-grid; place-items: center; min-width: 20px; height: 20px; padding: 0 6px; border-radius: 10px; background: var(--qizil); color: #fff; font-size: 12px; }
@@ -37,8 +40,8 @@
 .dav-qator { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 8px 10px; border-radius: 12px; background: var(--sirt-2); }
 .dav-qator b { font-weight: 800; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .tanlov { display: inline-flex; gap: 4px; flex-shrink: 0; }
-.tanlov button { width: 38px; height: 34px; border-radius: 10px; border: 2px solid var(--chiziq); background: var(--sirt); cursor: pointer; font-size: 15px; opacity: .55; transition: opacity .12s, transform .1s; }
-.tanlov button:hover { opacity: 1; }
+.tanlov button { width: 38px; height: 34px; border-radius: 10px; border: 2px solid var(--chiziq); background: var(--sirt); cursor: pointer; font-size: 15px; opacity: .55; transition: opacity .12s, transform .18s cubic-bezier(.3,1.6,.5,1), box-shadow .15s; }
+.tanlov button:hover { opacity: 1; transform: translateY(-2px); box-shadow: 0 0 0 3px color-mix(in srgb, var(--aksent) 40%, transparent); }
 .tanlov button.faol { opacity: 1; border-color: var(--matn); background: color-mix(in srgb, var(--aksent) 30%, var(--sirt)); }
 .tanlov button:active { transform: scale(.92); }
 .tanlov button:focus-visible { outline: 3px solid var(--kok); outline-offset: 1px; opacity: 1; }
@@ -64,14 +67,15 @@
 .baj-royxat { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 6px; }
 .baj-qator { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; align-items: center; gap: 6px; padding: 6px 8px; border-radius: 10px; background: var(--sirt-2); }
 .baj-qator b { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.yulduz { min-width: 46px; height: 34px; border-radius: 10px; border: 2px solid var(--chiziq); background: var(--sirt); cursor: pointer; font-size: 13px; font-weight: 800; }
+.yulduz { transition: transform .18s cubic-bezier(.3,1.6,.5,1); min-width: 46px; height: 34px; border-radius: 10px; border: 2px solid var(--chiziq); background: var(--sirt); cursor: pointer; font-size: 13px; font-weight: 800; }
 .baj-izoh { grid-column: 1 / -1; }
 .baj-izoh input { width: 100%; padding: 6px 10px; border-radius: 9px; border: 2px solid var(--chiziq); background: var(--sirt); font-size: 14px; }
 
 /* Guruhlar va o'quvchilar */
 .guruhlar { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px; }
 .g-karta { text-align: left; padding: 14px; border-radius: 14px; border: 2px solid var(--chiziq); background: var(--sirt-2); cursor: pointer; display: flex; flex-direction: column; gap: 2px; }
-.g-karta:hover { border-color: var(--matn); }
+.g-karta { transition: transform .18s cubic-bezier(.3,1.6,.5,1), border-color .15s, box-shadow .15s; }
+.g-karta:hover { border-color: var(--matn); transform: translateY(-2px); box-shadow: 0 6px 0 -2px var(--chiziq); }
 .g-karta b { font-family: var(--f-sarlavha); font-size: 19px; }
 .oquvchilar { display: flex; flex-direction: column; gap: 6px; }
 .o-qator { display: grid; grid-template-columns: minmax(0, 1fr) auto auto auto; gap: 10px; align-items: center; padding: 8px 12px; border-radius: 12px; background: var(--sirt-2); cursor: pointer; border: 2px solid transparent; text-align: left; width: 100%; }
