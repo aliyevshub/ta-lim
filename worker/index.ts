@@ -139,7 +139,19 @@ async function jadvallar(db: any): Promise<void> {
         tel TEXT NOT NULL, izoh TEXT NOT NULL DEFAULT '', vaqt TEXT NOT NULL DEFAULT (datetime('now')))`),
     q(`CREATE TABLE IF NOT EXISTS rasmlar (id TEXT PRIMARY KEY, turi TEXT NOT NULL, malumot BLOB NOT NULL)`),
   ]);
+  // Yangi ustunlar (eski bazaga qo'shiladi; bor bo'lsa xato e'tiborsiz qoldiriladi)
+  for (const ustun of ["familiya TEXT NOT NULL DEFAULT ''", "ota_ona TEXT NOT NULL DEFAULT ''", "tel TEXT NOT NULL DEFAULT ''"]) {
+    try { await db.prepare(`ALTER TABLE oquvchilar ADD COLUMN ${ustun}`).run(); } catch { /* allaqachon bor */ }
+  }
   tayyor = true;
+}
+
+// O'quvchi ma'lumotlarini tekshirish
+function oquvchiTekshir(b: any): { ism: string; familiya: string; ota_ona: string; tel: string; guruh: number } | string {
+  const ism = qisqa(b?.ism, 60), familiya = qisqa(b?.familiya, 60), ota_ona = qisqa(b?.ota_ona, 80), tel = qisqa(b?.tel, 30);
+  if (ism.length < 2) return "O'quvchi ismini kiriting";
+  if (tel && !/^[+\d][\d\s()\-]{6,20}$/.test(tel)) return "Telefon raqamni to'g'ri kiriting";
+  return { ism, familiya, ota_ona, tel, guruh: butun(b?.guruh_id) };
 }
 
 async function sozlama(db: any, k: string): Promise<string | null> {
@@ -208,7 +220,7 @@ async function otaOnaMalumoti(db: any, o: any) {
     db.prepare("SELECT oy, SUM(summa) AS summa FROM tolovlar WHERE oquvchi_id = ? GROUP BY oy ORDER BY oy DESC LIMIT 12").bind(o.id).all(),
   ]);
   return {
-    ism: o.ism,
+    ism: [o.ism, o.familiya].filter(Boolean).join(" "),
     guruh,
     telegram: !!o.tg_chat,
     darslar: darslar.results,
@@ -297,18 +309,19 @@ async function admin(req: Request, env: Env, yol: string, url: URL): Promise<Res
   // ---------- O'quvchilar ----------
   if (yol === "/oquvchilar" && usul === "GET") {
     const { results } = await db.prepare(
-      `SELECT o.id, o.ism, o.guruh_id, o.kod, o.faol, o.yaratilgan, (o.tg_chat IS NOT NULL) AS telegram, g.nomi AS guruh
-       FROM oquvchilar o LEFT JOIN guruhlar g ON g.id = o.guruh_id ORDER BY o.faol DESC, g.sinf, o.ism`
+      `SELECT o.id, o.ism, o.familiya, o.ota_ona, o.tel, o.guruh_id, o.kod, o.faol, o.yaratilgan, (o.tg_chat IS NOT NULL) AS telegram, g.nomi AS guruh
+       FROM oquvchilar o LEFT JOIN guruhlar g ON g.id = o.guruh_id ORDER BY o.faol DESC, g.sinf, o.familiya, o.ism`
     ).all();
     return json(results);
   }
   if (yol === "/oquvchilar" && usul === "POST") {
-    const ism = qisqa(b.ism, 60), guruh = butun(b.guruh_id);
-    if (ism.length < 2) return xato("O'quvchi ismini kiriting");
-    if (!(await db.prepare("SELECT id FROM guruhlar WHERE id = ?").bind(guruh).first())) return xato("Guruhni tanlang");
+    const t = oquvchiTekshir(b);
+    if (typeof t === "string") return xato(t);
+    if (!(await db.prepare("SELECT id FROM guruhlar WHERE id = ?").bind(t.guruh).first())) return xato("Guruhni tanlang");
     for (let i = 0; i < 5; i++) {
       try {
-        const r = await db.prepare("INSERT INTO oquvchilar (ism, guruh_id, kod) VALUES (?, ?, ?) RETURNING *").bind(ism, guruh, otaOnaKodi()).first();
+        const r = await db.prepare("INSERT INTO oquvchilar (ism, familiya, ota_ona, tel, guruh_id, kod) VALUES (?, ?, ?, ?, ?, ?) RETURNING *")
+          .bind(t.ism, t.familiya, t.ota_ona, t.tel, t.guruh, otaOnaKodi()).first();
         return json(r, 201);
       } catch { /* kod takrorlansa, qayta urinamiz */ }
     }
@@ -323,10 +336,11 @@ async function admin(req: Request, env: Env, yol: string, url: URL): Promise<Res
       return json({ kod });
     }
     if (usul === "PUT") {
-      const ism = qisqa(b.ism, 60), guruh = butun(b.guruh_id);
-      if (ism.length < 2) return xato("O'quvchi ismini kiriting");
-      if (!(await db.prepare("SELECT id FROM guruhlar WHERE id = ?").bind(guruh).first())) return xato("Guruhni tanlang");
-      await db.prepare("UPDATE oquvchilar SET ism=?, guruh_id=?, faol=? WHERE id=?").bind(ism, guruh, b.faol ? 1 : 0, id).run();
+      const t = oquvchiTekshir(b);
+      if (typeof t === "string") return xato(t);
+      if (!(await db.prepare("SELECT id FROM guruhlar WHERE id = ?").bind(t.guruh).first())) return xato("Guruhni tanlang");
+      await db.prepare("UPDATE oquvchilar SET ism=?, familiya=?, ota_ona=?, tel=?, guruh_id=?, faol=? WHERE id=?")
+        .bind(t.ism, t.familiya, t.ota_ona, t.tel, t.guruh, b.faol ? 1 : 0, id).run();
       return json({ ok: true });
     }
     if (usul === "DELETE") {

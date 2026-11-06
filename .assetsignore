@@ -9,3 +9,4 @@ wrangler.jsonc
 .assetsignore
 .gitignore
 .git
+wrangler.test.jsonc

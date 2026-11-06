@@ -111,7 +111,10 @@
     async function guruhlarniYukla() {
         guruhlar = await api("/api/admin/guruhlar");
         const opt = guruhlar.map((g) => `<option value="${g.id}">${xv(g.nomi)}</option>`).join("");
-        for (const id of ["#j-guruh", "#b-guruh", "#o-guruh", "#ou-guruh"]) {
+        const filtr = el("#o-filtr-guruh"), fOldin = filtr.value;
+        filtr.innerHTML = `<option value="">Barcha guruhlar</option>` + opt;
+        filtr.value = fOldin;
+        for (const id of ["#j-guruh", "#b-guruh", "#ou-guruh"]) {
             const s = el(id);
             const oldin = s.value;
             s.innerHTML = opt;
@@ -182,53 +185,80 @@
     async function oquvchilarniYukla() {
         await guruhlarniYukla();
         oquvchilar = await api("/api/admin/oquvchilar");
-        el("#o-royxat").innerHTML = oquvchilar.length
-            ? oquvchilar.map((o) => `<button type="button" class="o-qator${o.faol ? "" : " nofaol"}" data-o="${o.id}">
-          <b>${xv(o.ism)}</b>
-          <span class="izoh o-guruh">${xv(o.guruh)}</span>
-          <span class="o-tg" title="Telegram">${o.telegram ? "🔔" : "🔕"}</span>
-          <span class="kod">${xv(o.kod)}</span>
-        </button>`).join("")
-            : `<div class="bosh-holat">Hali o'quvchi yo'q.</div>`;
+        oquvchilarJadvali();
     }
-    el("#o-forma").addEventListener("submit", async (e) => {
-        e.preventDefault();
-        if (!guruhlar.length)
-            return xabar("Avval guruh qo'shing");
-        try {
-            const r = await post("/api/admin/oquvchilar", { ism: el("#o-ism").value, guruh_id: el("#o-guruh").value });
-            el("#o-ism").value = "";
-            xabar(`Qo'shildi ✓ Ota-ona kodi: ${r.kod}`);
-            await oquvchilarniYukla();
-        }
-        catch (err) {
-            xabar(err.message);
-        }
-    });
+    function oquvchilarJadvali() {
+        const q = el("#o-qidir").value.trim().toLowerCase();
+        const g = el("#o-filtr-guruh").value;
+        const royxat = oquvchilar.filter((o) => (!g || String(o.guruh_id) === g) &&
+            (!q || [o.ism, o.familiya, o.ota_ona, o.tel, o.kod].join(" ").toLowerCase().includes(q)));
+        const faol = oquvchilar.filter((o) => o.faol).length;
+        el("#o-sanoq").textContent = oquvchilar.length ? `· ${faol} ta faol` : "";
+        const telHref = (t) => "tel:" + t.replace(/[^\d+]/g, "");
+        el("#o-jadval").innerHTML = oquvchilar.length
+            ? `<thead><tr><th>№</th><th>Familiya, ism</th><th>Ota-onasi</th><th>Telefon</th><th>Guruh</th><th>Kod</th><th title="Telegram">🔔</th></tr></thead><tbody>${royxat.map((o, i) => `<tr class="${o.faol ? "" : "nofaol"}" data-o="${o.id}" tabindex="0">
+            <td class="raqam">${i + 1}</td>
+            <td class="ism-k"><b>${xv([o.familiya, o.ism].filter(Boolean).join(" "))}</b>${o.faol ? "" : "<span>nofaol</span>"}</td>
+            <td>${xv(o.ota_ona) || "—"}</td>
+            <td>${o.tel ? `<a class="tel" href="${xv(telHref(o.tel))}" data-tel>${xv(o.tel)}</a>` : "—"}</td>
+            <td>${xv(o.guruh)}</td>
+            <td class="kod">${xv(o.kod)}</td>
+            <td title="${o.telegram ? "Telegram ulangan" : "Telegram ulanmagan"}">${o.telegram ? "🔔" : "🔕"}</td>
+          </tr>`).join("") || `<tr><td colspan="7">Hech narsa topilmadi</td></tr>`}</tbody>`
+            : `<tbody><tr><td>Hali o'quvchi yo'q. «+ O'quvchi» tugmasini bosing.</td></tr></tbody>`;
+    }
+    el("#o-qidir").addEventListener("input", oquvchilarJadvali);
+    el("#o-filtr-guruh").addEventListener("change", oquvchilarJadvali);
     let tahrirOquvchi = null;
-    el("#o-royxat").addEventListener("click", (e) => {
-        const b = e.target.closest("[data-o]");
-        const o = b && oquvchilar.find((x) => x.id === Number(b.dataset.o));
-        if (!o)
-            return;
+    function oquvchiOyna(o) {
+        if (!o && !guruhlar.length)
+            return xabar("Avval guruh qo'shing");
         tahrirOquvchi = o;
-        el("#ou-ism").value = o.ism;
-        el("#ou-guruh").value = String(o.guruh_id);
-        el("#ou-faol").checked = !!o.faol;
-        el("#ou-kod").textContent = o.kod;
+        el("#ou-sarlavha").textContent = o ? "O'quvchini tahrirlash" : "Yangi o'quvchi";
+        el("#ou-ism").value = o?.ism ?? "";
+        el("#ou-familiya").value = o?.familiya ?? "";
+        el("#ou-ota-ona").value = o?.ota_ona ?? "";
+        el("#ou-tel").value = o?.tel ?? "";
+        const fg = el("#o-filtr-guruh").value;
+        el("#ou-guruh").value = String(o?.guruh_id ?? (fg || guruhlar[0]?.id));
+        el("#ou-faol").checked = o ? !!o.faol : true;
+        el("#ou-faol-q").hidden = !o;
+        el("#ou-kod-blok").hidden = !o;
+        el("#ou-ochir").hidden = !o;
+        el("#ou-kod").textContent = o?.kod ?? "";
         el("#ou-xato").hidden = true;
         el("#oquvchi-oyna").showModal();
-    });
+        el("#ou-ism").focus();
+    }
+    el("#o-yangi").addEventListener("click", () => oquvchiOyna(null));
+    const jadvalOch = (e) => {
+        if (e.target.closest("[data-tel]"))
+            return; // telefon havolasi — qo'ng'iroq
+        const r = e.target.closest("[data-o]");
+        const o = r && oquvchilar.find((x) => x.id === Number(r.dataset.o));
+        if (o)
+            oquvchiOyna(o);
+    };
+    el("#o-jadval").addEventListener("click", jadvalOch);
+    el("#o-jadval").addEventListener("keydown", (e) => { if (e.key === "Enter")
+        jadvalOch(e); });
     el("#oquvchi-forma").addEventListener("submit", async (e) => {
         e.preventDefault();
-        if (!tahrirOquvchi)
-            return;
+        const malumot = {
+            ism: el("#ou-ism").value, familiya: el("#ou-familiya").value,
+            ota_ona: el("#ou-ota-ona").value, tel: el("#ou-tel").value,
+            guruh_id: el("#ou-guruh").value, faol: el("#ou-faol").checked,
+        };
         try {
-            await put(`/api/admin/oquvchilar/${tahrirOquvchi.id}`, {
-                ism: el("#ou-ism").value, guruh_id: el("#ou-guruh").value, faol: el("#ou-faol").checked,
-            });
+            if (tahrirOquvchi) {
+                await put(`/api/admin/oquvchilar/${tahrirOquvchi.id}`, malumot);
+                xabar("Saqlandi ✓");
+            }
+            else {
+                const r = await post("/api/admin/oquvchilar", malumot);
+                xabar(`Qo'shildi ✓ Ota-ona kodi: ${r.kod}`);
+            }
             el("#oquvchi-oyna").close();
-            xabar("Saqlandi ✓");
             await oquvchilarniYukla();
         }
         catch (err) {

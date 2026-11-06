@@ -85,14 +85,13 @@
           <div id="g-royxat" class="guruhlar"></div>
         </div>
         <div class="karta blok">
-          <div class="blok-bosh"><h2>O'quvchilar</h2></div>
-          <form id="o-forma" class="qosh-forma">
-            <input id="o-ism" class="inp" placeholder="O'quvchi ismi" maxlength="60" required>
-            <select id="o-guruh" class="inp" aria-label="Guruh"></select>
-            <button class="tugma asosiy" type="submit">+ Qo'shish</button>
-          </form>
-          <p class="izoh">Har bir o'quvchiga <b>ota-ona kodi</b> beriladi. Kodni ota-onaga yuboring — ular saytdagi «Ota-onalar uchun» bo'limiga shu kod bilan kiradi.</p>
-          <div id="o-royxat" class="oquvchilar"></div>
+          <div class="blok-bosh"><h2>O'quvchilar <span class="izoh" id="o-sanoq"></span></h2><button class="tugma kichik asosiy" id="o-yangi" type="button">+ O'quvchi</button></div>
+          <div class="o-filtr">
+            <input id="o-qidir" class="inp" type="search" placeholder="🔍 Qidirish: ism, familiya, ota-ona yoki telefon" autocomplete="off">
+            <select id="o-filtr-guruh" class="inp" aria-label="Guruh bo'yicha"><option value="">Barcha guruhlar</option></select>
+          </div>
+          <div class="jadval-joy"><table class="jadval o-jadval" id="o-jadval"></table></div>
+          <p class="izoh">Qatorni bosib tahrirlang. Har bir o'quvchiga <b>ota-ona kodi</b> beriladi — ota-onalar saytdagi «Ota-onalar uchun» bo'limiga shu kod bilan kiradi.</p>
         </div>
       </section>
 
@@ -181,11 +180,16 @@
 
   <dialog class="oyna" id="oquvchi-oyna">
     <form class="oyna-ichi" id="oquvchi-forma" novalidate>
-      <div class="oyna-bosh"><h3>O'quvchi</h3><button type="button" class="yop" data-yop aria-label="Yopish">✕</button></div>
-      <label class="maydon">Ismi<input id="ou-ism" maxlength="60" required></label>
+      <div class="oyna-bosh"><h3 id="ou-sarlavha">O'quvchi</h3><button type="button" class="yop" data-yop aria-label="Yopish">✕</button></div>
+      <div class="ikki">
+        <label class="maydon">Ismi<input id="ou-ism" maxlength="60" required autocomplete="off"></label>
+        <label class="maydon">Familiyasi<input id="ou-familiya" maxlength="60" autocomplete="off"></label>
+      </div>
+      <label class="maydon">Ota-onasining ismi<input id="ou-ota-ona" maxlength="80" placeholder="Masalan: Malika Karimova (onasi)" autocomplete="off"></label>
+      <label class="maydon">Telefon raqami<input id="ou-tel" type="tel" maxlength="30" placeholder="+998 __ ___ __ __" autocomplete="off"></label>
       <label class="maydon">Guruh<select id="ou-guruh"></select></label>
-      <label class="belgi-q"><input id="ou-faol" type="checkbox"> Faol (darsga qatnashyapti)</label>
-      <div class="kod-blok">
+      <label class="belgi-q" id="ou-faol-q"><input id="ou-faol" type="checkbox"> Faol (darsga qatnashyapti)</label>
+      <div class="kod-blok" id="ou-kod-blok">
         <span class="izoh">Ota-ona kodi</span>
         <b id="ou-kod" class="kod"></b>
         <div class="tugmalar"><button type="button" class="tugma kichik" id="ou-nusxa">Nusxalash</button><button type="button" class="tugma kichik" id="ou-yangi-kod">Yangi kod</button></div>
